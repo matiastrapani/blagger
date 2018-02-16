@@ -44,10 +44,7 @@ for y, valY in enumerate(level3):
 fondo.set_colorkey(transColor)
 
 blagger = blaggerPlayer.Spr((240, 148), sprites)
-#iniX = 19 + 16 * x
-#endX = -17 + 16 * x
-#iniY = 20 + 16 * y 
-#endY = -6 +16 * y
+
 badGuy = baddiesPlayer.Spr((22+16*11,-13+16*18), sprites, 'waldo', 3, (181,239,148), 195, 367)
 idx = 0
 tile = animTiles.subsurface(animIndex[idx])
@@ -70,8 +67,8 @@ while blagger.game_over == False:
 #    badGuyJon.update()
     screen.fill((0,0,0))
     
-    if blagger.posX>320:
-        blagger.image.set_palette_at(3,(255,0,0))
+    #if blagger.posX>320:
+        #blagger.image.set_palette_at(3,(255,0,0))
         
     screen.blit(blagger.image, blagger.rect)
     screen.blit(fondo, (0,0))

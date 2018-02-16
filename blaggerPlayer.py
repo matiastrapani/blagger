@@ -17,9 +17,8 @@ class Spr(pygame.sprite.Sprite):
         self.nextDirection = ''
         self.jumpDir = ''
         self.lives = 0
-        self.jumpseq = [-1,-1, 0, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,0, -1,-1,    0,  1, 0,  1, 1, 0,  1, 1, 1,  1, 1, 1,  1, 1, 1,  1, 1, 1,  1, 1,1]
+        self.jumpseq = [-1,-1,0, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,0, -1,-1,0,    0,0,  1,1,1,  1,1,1,  1,1,1,  1,1,1,  1,1,1,  1,1,1]
         self.jumpcount = 0
-        self.clk = 0
         self.fall = False
         
     def get_frame(self, frame_set):
@@ -33,130 +32,157 @@ class Spr(pygame.sprite.Sprite):
         else:
             self.sheet.set_clip(pygame.Rect(clipped_rect))
         return clipped_rect
+
+    def get_levelPos(self):
+        i = int((self.posX-7)//16)
+        j = int((self.posY)//16)
+        return i, j
     
     def update(self, level):
         x0 = self.posX
         y0 = self.posY
-        self.clk += 1
-        if self.clk == 1:
-            self.clk =0
-            if self.nextDirection != '':
-                if self.direction != self.nextDirection\
-                    and self.nextDirection != 'jump':
-                    self.direction = self.nextDirection
-                    self.nextDirection=''
+        
+        if self.nextDirection != '':
+            if self.nextDirection[:4] != 'jump' and not self.fall:
+                self.jumpDir = ''
+                self.direction = self.nextDirection
+                self.nextDirection = ''
+
+            elif ((self.direction == 'stand_right' or \
+            self.direction == 'stand_left') and \
+            self.nextDirection == 'jump') and not self.fall:
+                    self.jumpDir = self.direction
+                    self.direction = 'jump'
+                    self.nextDirection = ''
+            
+            elif ((self.direction == 'right' and \
+            self.nextDirection == 'jump') or \
+            self.nextDirection == 'jump_right') and not self.fall:
+                    self.jumpDir = 'stand_right'
+                    self.direction = 'jump_right'
+                    self.nextDirection = ''
+
+            elif ((self.direction == 'left' and \
+            self.nextDirection == 'jump') or \
+            self.nextDirection == 'jump_left') and not self.fall:
+                    self.jumpDir = 'stand_left'
+                    self.direction = 'jump_left'
+                    self.nextDirection = ''
+                    
+        if self.direction == 'stand_left':
+            self.clip(self.left_states)
+
+        if self.direction == 'stand_right':
+            self.clip(self.right_states)
+
+        elif self.direction == 'left':
+            self.nextDirection = 'stand_left'
+            if not(self.fall):
+                self.frame+=1
+                self.clip(self.left_states)
+                self.posX -= self.vel
+            else:
+                self.clip(self.left_states)
+
+        elif self.direction == 'right':
+            self.nextDirection = 'stand_right'
+            if not(self.fall):
+                self.frame+=1
+                self.clip(self.right_states)
+                self.posX += self.vel
+            else:
+                self.clip(self.right_states)
+                
+        elif self.direction == 'jump':
+            self.posY += (self.jumpseq[self.jumpcount]*2)
+            self.jumpcount += 1
+            self.nextDirection = ''
+
+            if self.jumpDir == 'stand_right':
+                self.clip(self.right_states)
+            else:
+                self.clip(self.left_states)
+                
+            if self.jumpcount >= len(self.jumpseq):
+                self.direction = self.jumpDir
+                self.jumpDir = ''
+                self.jumpcount = 0
+
+
+        elif self.direction == 'jump_right':
+            self.posY += (self.jumpseq[self.jumpcount]*2)
+            self.jumpcount += 1
+            self.frame += 1
+            self.clip(self.right_states)
+            self.posX += self.vel
+            self.nextDirection = ''
+            if self.jumpcount >= len(self.jumpseq):
+                self.direction = self.jumpDir
+                self.jumpDir = ''
+                self.jumpcount = 0
+
+                  
+        elif self.direction == 'jump_left':
+            self.posY += (self.jumpseq[self.jumpcount]*2)
+            self.jumpcount += 1
+            self.frame += 1
+            self.clip(self.left_states)
+            self.posX -= self.vel
+            self.nextDirection = ''
+            if self.jumpcount >= len(self.jumpseq):
+                self.direction = self.jumpDir
+                self.jumpDir = ''
+                self.jumpcount = 0
+
+
+        i, j = self.get_levelPos()
+        if level[j - 1][i]  == 30 or 100 <= level[j - 1][i]     <= 102 or \
+        level[j][i]         == 30 or 100 <= level[j][i]         <= 102 or \
+        level[j - 1][i + 1] == 30 or 100 <= level[j - 1][i + 1] <= 102 or \
+        level[j][i + 1]     == 30 or 100 <= level[j][i + 1]     <= 102:
+                self.posX = x0
+                i, j = self.get_levelPos()
+
+        if level[j+1][i] == 38 or  \
+           level[j+1][i+1] == 38:
+               self.posX -= self.vel
+               i, j = self.get_levelPos()
+        if level[j+1][i] == 78 or  \
+           level[j+1][i+1] == 78:
+               self.posX += self.vel
+               i, j = self.get_levelPos()
+
                
-                elif (self.direction == 'stand_right'\
-                        or self.direction == 'stand_left')\
-                        and self.nextDirection == 'jump':
-                        self.jumpDir = self.direction
-                        self.nextDirection = ''
-                        self.direction = 'jump'
-                        
-                elif self.direction == 'right'\
-                        and self.nextDirection == 'jump':
-                        self.jumpDir = 'stand_right'
-                        self.nextDirection = ''
-                        self.direction = 'jump_right'
+        if (self.jumpcount == 0 and \
+            level[j+1][i] == 32 and  \
+            level[j+1][i+1] == 32) or \
+            self.jumpcount >= 20:
+                self.fall = True
+            
 
-                elif self.direction == 'left'\
-                        and self.nextDirection == 'jump':
-                        self.jumpDir = 'stand_left'
-                        self.nextDirection = ''
-                        self.direction = 'jump_left'
-                        
-       
-                        
-         
-            if self.direction == 'stand_left':
-                pass
-                #self.frame = 0
-                self.clip(self.left_states)
+        if self.fall:
+            if (self.posY-4)%16 == 0 and \
+                (level[j+1][i] != 32 or  \
+                level[j+1][i+1] != 32):
+                    self.fall = False
+                    self.jumpcount = 0
+                    self.nextDirection = ''
 
-            if self.direction == 'stand_right':
-                pass
-                #self.frame = 0
-                self.clip(self.right_states)
+                    if self.direction == 'jump_left' or \
+                    (self.direction == 'jump' and \
+                    self.jumpDir == 'stand_left'):
+                        self.direction = 'stand_left'
+                    elif self.direction == 'jump_right' or \
+                    (self.direction == 'jump' and \
+                    self.jumpDir == 'stand_right'):
+                        self.direction = 'stand_right'
+            else:
+                    if self.jumpcount == 0:
+                        self.posY += self.vel
 
-            elif self.direction == 'left' and not(self.fall):
-                self.frame+=1
-                self.clip(self.left_states)
-                self.posX -= self.vel
-                self.nextDirection = 'stand_left'
-            elif self.direction == 'left' and self.fall:
-                self.clip(self.left_states)
-                self.nextDirection = 'stand_left'
-
-                
-            elif self.direction == 'right' and not(self.fall):
-                self.frame+=1
-                self.clip(self.right_states)
-                self.posX += self.vel
-                self.nextDirection = 'stand_right'
-            elif self.direction == 'right' and self.fall:
-                self.clip(self.right_states)
-                self.nextDirection = 'stand_right'
-
-            elif self.direction == 'jump':
-                self.posY += (self.jumpseq[self.jumpcount]*2)
-                self.nextDirection = ''
-                self.jumpcount += 1
-
-                if self.jumpDir == 'stand_right':
-                    self.clip(self.right_states)
-                else:
-                    self.clip(self.left_states)
-                    
-                if self.jumpcount >= len(self.jumpseq):
-                      self.direction = self.jumpDir
-                      self.jumpcount = 0
-
-            elif self.direction == 'jump_right':
-                self.posY += (self.jumpseq[self.jumpcount]*2)
-                self.jumpcount += 1
-                self.frame += 1
-                self.clip(self.right_states)
-                self.posX += self.vel
-                self.nextDirection = ''
-                if self.jumpcount >= len(self.jumpseq):
-                      self.direction = 'stand_right'
-                      self.jumpcount = 0
-                      
-            elif self.direction == 'jump_left':
-                self.posY += (self.jumpseq[self.jumpcount]*2)
-                self.jumpcount += 1
-                self.frame += 1
-                self.clip(self.left_states)
-                self.posX -= self.vel
-                self.nextDirection = ''
-                if self.jumpcount >= len(self.jumpseq):
-                      self.direction = 'stand_left'
-                      self.jumpcount = 0
-                    
-            if (self.jumpcount == 0 and \
-                level[self.posY//16+1][(self.posX-7)//16] == 32 and  \
-                level[self.posY//16+1][(self.posX-7)//16+1] == 32) or \
-                self.jumpcount >= 20:
-                    self.fall = True
-            if self.fall:
-                if (self.posY-4)%16 == 0 and \
-                    (level[self.posY//16+1][(self.posX-7)//16] != 32 or  \
-                    level[self.posY//16+1][(self.posX-7)//16+1] != 32):
-                        self.fall = False
-                        self.jumpcount = 0
-                        self.nextDirection = ''
-
-                        if self.direction == 'jump_left' or (self.direction == 'jump' and self.jumpDir == 'stand_left'):
-                            self.direction = 'stand_left'
-                        elif self.direction == 'jump_right' or (self.direction == 'jump' and self.jumpDir == 'stand_right'):
-                            self.direction = 'stand_right'
-                else:
-                        if self.jumpcount == 0:
-                            self.posY += self.vel
-                
-
-            self.rect.center = (self.posX, self.posY)
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
+            
+        self.rect.center = (self.posX, self.posY)
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
         
         
     def handle_event(self, event, level):
@@ -165,7 +191,6 @@ class Spr(pygame.sprite.Sprite):
             pygame.quit()
             sys.exit()
 
-        #print self.posX
         #scr 640x480 spr 47x41
         if self.posX > (640+47/2) : self.posX -= (640+47)
         if self.posX < (0-47/2) : self.posX += (640+47)
