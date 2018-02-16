@@ -12,14 +12,14 @@ font = pygame.font.SysFont('arial', 30)
 pygame.display.set_caption('The Bank')
 
 game_over = False
-clktcks = 35
+clktcks = 40
 
 transColor = pygame.Color(0, 0, 0)
-sprites = pygame.image.load('img/blagger_sprites_.png')
+sprites = pygame.image.load('blagger_sprites_.png')
 sprites.set_colorkey(transColor)
 
-tiles = pygame.image.load('img/blagger_tiles_.png')
-animTiles = pygame.image.load('img/anim_tiles_.png')
+tiles = pygame.image.load('blagger_tiles_.png')
+animTiles = pygame.image.load('anim_tiles_.png')
 
 #get level background
 bricks = {}
@@ -43,7 +43,7 @@ for y, valY in enumerate(level3):
             bloque2 += (int(x * 16),int(y * 16)),
 fondo.set_colorkey(transColor)
 
-blagger = blaggerPlayer.Spr((240, 148-32), sprites)
+blagger = blaggerPlayer.Spr((240, 148), sprites)
 #iniX = 19 + 16 * x
 #endX = -17 + 16 * x
 #iniY = 20 + 16 * y 
@@ -75,16 +75,13 @@ while blagger.game_over == False:
         
     screen.blit(blagger.image, blagger.rect)
     screen.blit(fondo, (0,0))
-
     #pygame.draw.rect(screen, (255, 255, 255), (blagger.posX-7,blagger.posY-16,16,32), 1)
-    #pygame.draw.rect(screen, (255,0, 0), ((blagger.posX-7)//16*16,(blagger.posY//16+1)*16,16,16), 1)
-
-    pygame.draw.rect(screen, (255,0, 0), (int((blagger.posX-7)//16)*16,(int(blagger.posY//16-2))*16,16,16), 1)
-    
+    #pygame.draw.rect(screen, (255,0, 0), ((blagger.posX-7)//16*16,(blagger.posY//16+1)*16,32,16), 1)
     tile = animTiles.subsurface(animIndex[idx])
-    #if level3[int(blagger.posY//16+1)][(int(blagger.posX-7)//16)]==32 and \
-       #level3[int(blagger.posY//16+1)][int((blagger.posX-7)//16+1)]==32:
-           #print 'fall'
+    #if level4[blagger.posY//16+1][(blagger.posX-7)//16]==32 and \
+       #level4[blagger.posY//16+1][(blagger.posX-7)//16+1]==32:
+            #pass
+            #print 'fall'
     for pos in bloque1:
         screen.blit(tile, pos)
 

@@ -13,13 +13,14 @@ class Spr(pygame.sprite.Sprite):
         self.direction = 'stand_right'
         self.posX = position[0]
         self.posY = position[1]
-        self.vel  = 2.75
+        self.vel  = 2
         self.nextDirection = ''
         self.jumpDir = ''
         self.lives = 0
-        self.jumpseq = [-1,-1,-2,-1,-2,-1,-2,-1,-2,-1,-1,-1,-1,-1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 1, 2, 1]
-        self.jumpcount = -1
+        self.jumpseq = [-1,-1, 0, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,-1, -1,-1,0, -1,-1,    0,  1, 0,  1, 1, 0,  1, 1, 1,  1, 1, 1,  1, 1, 1,  1, 1, 1,  1, 1,1]
+        self.jumpcount = 0
         self.clk = 0
+        self.fall = False
         
     def get_frame(self, frame_set):
         if self.frame > (len(frame_set) - 1):
@@ -36,9 +37,6 @@ class Spr(pygame.sprite.Sprite):
     def update(self, level):
         x0 = self.posX
         y0 = self.posY
-
-
-        
         self.clk += 1
         if self.clk == 1:
             self.clk =0
@@ -47,7 +45,6 @@ class Spr(pygame.sprite.Sprite):
                     and self.nextDirection != 'jump':
                     self.direction = self.nextDirection
                     self.nextDirection=''
- 
                
                 elif (self.direction == 'stand_right'\
                         or self.direction == 'stand_left')\
@@ -55,21 +52,18 @@ class Spr(pygame.sprite.Sprite):
                         self.jumpDir = self.direction
                         self.nextDirection = ''
                         self.direction = 'jump'
-                        self.jumpcount = 0
                         
                 elif self.direction == 'right'\
                         and self.nextDirection == 'jump':
                         self.jumpDir = 'stand_right'
                         self.nextDirection = ''
                         self.direction = 'jump_right'
-                        self.jumpcount = 0
 
                 elif self.direction == 'left'\
                         and self.nextDirection == 'jump':
                         self.jumpDir = 'stand_left'
                         self.nextDirection = ''
                         self.direction = 'jump_left'
-                        self.jumpcount = 0
                         
        
                         
@@ -84,17 +78,23 @@ class Spr(pygame.sprite.Sprite):
                 #self.frame = 0
                 self.clip(self.right_states)
 
-            elif self.direction == 'left':
+            elif self.direction == 'left' and not(self.fall):
                 self.frame+=1
                 self.clip(self.left_states)
                 self.posX -= self.vel
                 self.nextDirection = 'stand_left'
+            elif self.direction == 'left' and self.fall:
+                self.clip(self.left_states)
+                self.nextDirection = 'stand_left'
 
                 
-            elif self.direction == 'right':
+            elif self.direction == 'right' and not(self.fall):
                 self.frame+=1
                 self.clip(self.right_states)
                 self.posX += self.vel
+                self.nextDirection = 'stand_right'
+            elif self.direction == 'right' and self.fall:
+                self.clip(self.right_states)
                 self.nextDirection = 'stand_right'
 
             elif self.direction == 'jump':
@@ -109,7 +109,7 @@ class Spr(pygame.sprite.Sprite):
                     
                 if self.jumpcount >= len(self.jumpseq):
                       self.direction = self.jumpDir
-                      self.jumpcount = -1
+                      self.jumpcount = 0
 
             elif self.direction == 'jump_right':
                 self.posY += (self.jumpseq[self.jumpcount]*2)
@@ -120,7 +120,7 @@ class Spr(pygame.sprite.Sprite):
                 self.nextDirection = ''
                 if self.jumpcount >= len(self.jumpseq):
                       self.direction = 'stand_right'
-                      self.jumpcount = -1
+                      self.jumpcount = 0
                       
             elif self.direction == 'jump_left':
                 self.posY += (self.jumpseq[self.jumpcount]*2)
@@ -131,21 +131,29 @@ class Spr(pygame.sprite.Sprite):
                 self.nextDirection = ''
                 if self.jumpcount >= len(self.jumpseq):
                       self.direction = 'stand_left'
-                      self.jumpcount = -1
+                      self.jumpcount = 0
+                    
+            if (self.jumpcount == 0 and \
+                level[self.posY//16+1][(self.posX-7)//16] == 32 and  \
+                level[self.posY//16+1][(self.posX-7)//16+1] == 32) or \
+                self.jumpcount >= 20:
+                    self.fall = True
+            if self.fall:
+                if (self.posY-4)%16 == 0 and \
+                    (level[self.posY//16+1][(self.posX-7)//16] != 32 or  \
+                    level[self.posY//16+1][(self.posX-7)//16+1] != 32):
+                        self.fall = False
+                        self.jumpcount = 0
+                        self.nextDirection = ''
 
-
-            if self.jumpcount >= 0 and self.jumpcount <= 13 and \
-               level[int(self.posY//16 - 2)][(int(self.posX-7)//16)] != 32:
-                print y0
-                self.posY = y0
+                        if self.direction == 'jump_left' or (self.direction == 'jump' and self.jumpDir == 'stand_left'):
+                            self.direction = 'stand_left'
+                        elif self.direction == 'jump_right' or (self.direction == 'jump' and self.jumpDir == 'stand_right'):
+                            self.direction = 'stand_right'
+                else:
+                        if self.jumpcount == 0:
+                            self.posY += self.vel
                 
-            if level[int(self.posY//16 - 1)][(int(self.posX-7)//16)] != 32 or \
-               level[int(self.posY//16)][(int(self.posX-7)//16)] != 32 or \
-               level[int(self.posY//16 - 1)][(int(self.posX-7)//16 + 1)] != 32 or \
-               level[int(self.posY//16)][(int(self.posX-7)//16 + 1)] != 32:
-               
-                self.posX = x0
-        
 
             self.rect.center = (self.posX, self.posY)
             self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -165,7 +173,7 @@ class Spr(pygame.sprite.Sprite):
         if self.posY < 0 : self.posY += 480
         self.update(level)
         
-        if self.jumpcount == -1:
+        if self.jumpcount == 0:
             # Creo una lista vacia 
             pressed_key_text = []
 
@@ -180,19 +188,16 @@ class Spr(pygame.sprite.Sprite):
                         key_name = pygame.key.name(key_constant)
                         if key_name == 'up' or key_name == '[8]':
                             self.nextDirection = 'jump'
-                            self.jumpcount = 0
                             
                         if key_name == 'left'  or key_name == '[4]':
                             if self.nextDirection == 'jump':
                                 self.nextDirection = 'jump_left'
-                                self.jumpcount = 0
                             else:
                                 self.nextDirection = 'left'
-
+                                
                         if key_name == 'right' or key_name == '[6]':
                             if self.nextDirection == 'jump':
                                 self.nextDirection = 'jump_right'
-                                self.jumpcount = 0
                             else:
                                 self.nextDirection = 'right'
 
