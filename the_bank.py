@@ -15,11 +15,11 @@ game_over = False
 clktcks = 40
 
 transColor = pygame.Color(0, 0, 0)
-sprites = pygame.image.load('blagger_sprites_.png')
+sprites = pygame.image.load('img/blagger_sprites_.png')
 sprites.set_colorkey(transColor)
 
-tiles = pygame.image.load('blagger_tiles_.png')
-animTiles = pygame.image.load('anim_tiles_.png')
+tiles = pygame.image.load('img/blagger_tiles_.png')
+animTiles = pygame.image.load('img/anim_tiles_.png')
 
 #get level background
 bricks = {}
@@ -97,6 +97,6 @@ while blagger.game_over == False:
     if idx>15:
         idx = 0
 
-print 'game over'
+print ('game over')
 pygame.quit()
 sys.exit()
