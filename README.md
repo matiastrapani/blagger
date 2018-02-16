@@ -1,5 +1,5 @@
 # blagger
-Blagger c64 game remake.
+Blagger c64 game remake in Python.
 A tribute to the 1983 Antony Crowther game, and all the hours dedicated to playing it.
 This is a WIP hobby project just for fun and to learn python programming.
 It's coded in Python 2.71 for Windows and uses Pygame libraries, I think it could be easily modified for Python 3.x.
