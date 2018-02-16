@@ -1,6 +1,5 @@
 import pygame, sys
-from pygame.locals import *
-from levels import *
+from levels import level3 as level
 import blaggerPlayer, baddiesPlayer
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -14,6 +13,8 @@ pygame.display.set_caption('The Bank')
 
 game_over = False
 clktcks = 40
+blagger_sounds = True
+keys = 0
 
 transColor = pygame.Color(0, 0, 0)
 sprites = pygame.image.load('img/blagger_sprites_.png')
@@ -34,10 +35,12 @@ for y in range(5):
 
 bloque1=()
 bloque2=()
-for y, valY in enumerate(level3):
-    for x, valX in enumerate(level3[y]):
+for y, valY in enumerate(level):
+    for x, valX in enumerate(level[y]):
         tile = tiles.subsurface(bricks[valX])
         fondo.blit(tile, (int(x * 16),int(y * 16)))
+        if valX == 33:
+            keys += 1
         if valX == 38:
             bloque1 += (int(x * 16),int(y * 16)),
         if valX == 78:
@@ -50,7 +53,6 @@ badGuy = baddiesPlayer.Spr((22+16*11,-13+16*18), sprites, 'waldo', 3, (181,239,1
 idx = 0
 tile = animTiles.subsurface(animIndex[idx])
 
-
 #carga sonidos
 pygame.mixer.init()
 key_sound = pygame.mixer.Sound('wav/blagger_llave.wav')
@@ -58,14 +60,7 @@ step_sound = pygame.mixer.Sound('wav/blagger_paso.wav')
 fall_sound = pygame.mixer.Sound('wav/blagger_caida.wav')
 jump_sound = pygame.mixer.Sound('wav/blagger_salto.wav')
 
-
-
-#badGuyJon = baddiesPlayer.Spr((19+16*11,-6+16*12), sprites, 'joni', (0,255,0), 195, 351)
-#badGuyJon.dir = 'up'
-
-#Sprites.set_palette_at(3,(255,0,0))
 clock = pygame.time.Clock()
-#pygame.time.set_timer(USEREVENT + 1, 100)
 
 while blagger.game_over == False:
     for event in pygame.event.get():
@@ -73,12 +68,11 @@ while blagger.game_over == False:
                 game_over = True
                 pygame.quit()
                 sys.exit()
-    blagger.handle_event(event, level3)
+    blagger.handle_event(event, level)
     badGuy.update()
-#    badGuyJon.update()
     screen.fill((0,0,0))
 
-    if True:
+    if blagger_sounds:
         if blagger.sound == 'jump':
             jump_sound.stop()
             jump_sound.play()
@@ -102,49 +96,50 @@ while blagger.game_over == False:
             key_sound.play()
             blagger.sound = ''
         
-    #if blagger.posX>320:
-        #blagger.image.set_palette_at(3,(255,0,0))
+    if blagger.fallcount > 32:
+        blagger.image.set_palette_at(3,(255,0,0))
         
     screen.blit(blagger.image, blagger.rect)
     
     i,j = blagger.get_levelPos()
-    if level3[j][i] == 33:
-        blagger.key += 1
-        level3[j][i] = 32
+    if level[j][i] == 33:
+        keys -= 1
+        level[j][i] = 32
         fondo.fill((0,0,0),(i*16,j*16,16,16))
-        key_sound.stop()
-        key_sound.play()
+        if blagger_sounds:
+            key_sound.stop()
+            key_sound.play()
 
-    elif level3[j-1][i] == 33:
-        blagger.key += 1
-        level3[j-1][i] = 32
+    elif level[j-1][i] == 33:
+        keys -= 1
+        level[j-1][i] = 32
         fondo.fill((0,0,0),(i*16,(j-1)*16,16,16))
-        key_sound.stop()
-        key_sound.play()
+        if blagger_sounds:
+            key_sound.stop()
+            key_sound.play()
 
-    elif level3[j][i+1] == 33:
-        blagger.key += 1
-        level3[j][i+1] = 32
+    elif level[j][i+1] == 33:
+        keys -= 1
+        level[j][i+1] = 32
         fondo.fill((0,0,0),((i+1)*16,j*16,16,16))
-        key_sound.stop()
-        key_sound.play()
+        if blagger_sounds:
+            key_sound.stop()
+            key_sound.play()
 
-    elif level3[j-1][i+1] == 33:
-        blagger.key += 1
-        level3[j-1][i+1] = 32
+
+    elif level[j-1][i+1] == 33:
+        keys -= 1
+        level[j-1][i+1] = 32
         fondo.fill((0,0,0),((i+1)*16,(j-1)*16,16,16))
-        key_sound.stop()
-        key_sound.play()
-        
+        if blagger_sounds:
+            key_sound.stop()
+            key_sound.play()
+
     screen.blit(fondo, (0,0))
                         
     #pygame.draw.rect(screen, (255, 255, 255), (i*16,j*16,16,16), 1)
     #pygame.draw.rect(screen, (255,0, 0), ((blagger.posX-7)//16*16,(blagger.posY//16+1)*16,32,16), 1)
     tile = animTiles.subsurface(animIndex[idx])
-    #if level4[blagger.posY//16+1][(blagger.posX-7)//16]==32 and \
-       #level4[blagger.posY//16+1][(blagger.posX-7)//16+1]==32:
-            #pass
-            #print 'fall'
     for pos in bloque1:
         screen.blit(tile, pos)
 
@@ -152,7 +147,6 @@ while blagger.game_over == False:
     for pos in bloque2:
         screen.blit(tile, pos)
     screen.blit(badGuy.image, badGuy.rect)
-#    screen.blit(badGuyJon.image, badGuyJon.rect)
 
     pygame.display.flip()
     clock.tick(clktcks)

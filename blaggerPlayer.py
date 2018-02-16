@@ -22,7 +22,6 @@ class Spr(pygame.sprite.Sprite):
         self.fallcount = 0
         self.fall = False
         self.sound = ''
-        self.key = 0
         
     def get_frame(self, frame_set):
         if self.frame > (len(frame_set) - 1):
@@ -157,17 +156,11 @@ class Spr(pygame.sprite.Sprite):
                self.posX += self.vel
                i, j = self.get_levelPos()
 
-
-
-        
-
-               
         if (self.jumpcount == 0 and \
             level[j+1][i] == 32 and  \
             level[j+1][i+1] == 32) or \
-            self.jumpcount >= 20:
+            self.jumpcount >= 21:
                 self.fall = True
-            
 
         if self.fall:
             if (self.posY-4)%16 == 0 and \
@@ -178,8 +171,8 @@ class Spr(pygame.sprite.Sprite):
                     self.nextDirection = ''
                     self.sound = 'stop_fall'
                     #print self.fallcount
-                    self.fallcount = 0
-                    
+                    if self.fallcount <= 32:
+                        self.fallcount = 0
 
                     if self.direction == 'jump_left' or \
                     (self.direction == 'jump' and \
@@ -190,13 +183,11 @@ class Spr(pygame.sprite.Sprite):
                     self.jumpDir == 'stand_right'):
                         self.direction = 'stand_right'
             else:
-                    self.fallcount += 1
+                    if self.jumpcount == 0 or self.jumpcount > 24:
+                        self.fallcount += 1
                     if self.jumpcount == 0:
-                        self.posY += self.vel
-                        
+                        self.posY += self.vel                        
                         self.sound = 'fall'
-
-        #tomar llaves    
 
         self.rect.center = (self.posX, self.posY)
         self.image = self.sheet.subsurface(self.sheet.get_clip())
