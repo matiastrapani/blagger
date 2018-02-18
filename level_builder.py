@@ -1,5 +1,4 @@
 import pygame, sys
-from pygame.locals import *
 import brickPlayer
 
 #level builder 
@@ -17,7 +16,7 @@ import brickPlayer
 
 pygame.init()
 
-Sprites = pygame.image.load('blagger_tiles.png')
+Sprites = pygame.image.load('img/blagger_tiles_.png')
 
 
 if False:
@@ -34,14 +33,13 @@ if False:
     screen = pygame.display.set_mode((screenRect[0]*16, screenRect[1]*16))
     fondo = pygame.Surface((screenRect[0]*16, screenRect[1]*16))
 else:
-    from levels import *
+    from levels import level as levels
     #get level background
     bricks = {}
     for y in range(4):
         for x in range(32):
             bricks[int(x + y * 32)]  = (x * 16, y * 16, 16, 16)
 
-    levels = level3
     screenRect = (len(levels[0]),len(levels))
     screen = pygame.display.set_mode((screenRect[0]*16, screenRect[1]*16))
     fondo = pygame.Surface((screenRect[0]*16, screenRect[1]*16))
@@ -62,7 +60,6 @@ tile = brickPlayer.Spr((8, 8), Sprites)
 
 
 clock = pygame.time.Clock()
-pygame.time.set_timer(USEREVENT + 1, 100)
 
 while tile.game_over == False:
     for event in pygame.event.get():

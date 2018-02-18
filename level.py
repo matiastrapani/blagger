@@ -1,6 +1,5 @@
 import pygame, sys
-from levels import *
-from pygame.locals import *
+from levels import level as level3
 
 pygame.init()
 Esc = False
@@ -10,8 +9,8 @@ screen.fill((0,0,0))
 font = pygame.font.SysFont('arial', 30)
 pygame.display.set_caption('Level Representation')
 
-Sprites = pygame.image.load('blagger_tiles.png')
-animTiles = pygame.image.load('anim_tiles_.png')
+Sprites = pygame.image.load('img/blagger_tiles_.png')
+animTiles = pygame.image.load('img/anim_tiles_.png')
 
 brickIndex = {}
 for y in range(4):
