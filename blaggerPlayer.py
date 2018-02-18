@@ -1,7 +1,7 @@
 import pygame
 class Spr(pygame.sprite.Sprite):
     game_over = False
-    def __init__(self, position, general_sprites):
+    def __init__(self, general_sprites, position, direction='stand_right'):
         self.sheet = general_sprites
         self.sheet.set_clip(pygame.Rect(0, 0, 47, 41))
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -10,7 +10,7 @@ class Spr(pygame.sprite.Sprite):
         self.frame = 0
         self.right_states  = { 0: (0, 0, 47, 41), 1: (50, 0, 47, 41), 2: (100, 0, 47, 41), 3: (150,  0, 47, 41), 4: (200,  0, 47, 41), 5: (250,  0, 47, 41), 6: (300,  0, 47, 41), 7: (350,  0, 47, 41) }
         self.left_states = { 0: (400, 0, 47, 41), 1: (450, 0, 47, 41), 2: (500, 0, 47, 41), 3: (550, 0, 47, 41), 4: (0, 44, 47, 41), 5: (50, 44, 47, 41), 6: (100, 44, 47, 41), 7: (150, 44, 47, 41) }
-        self.direction = 'stand_right'
+        self.direction = direction
         self.posX = position[0]
         self.posY = position[1]
         self.vel  = 2
@@ -241,3 +241,13 @@ class Spr(pygame.sprite.Sprite):
                         elif key_name == 'escape':
                             self.game_over = True
                             
+class Safe(pygame.sprite.Sprite):
+    def __init__(self, general_sprites, position=(0,0)):
+        self.sheet = general_sprites
+        self.sheet.set_clip(pygame.Rect(550, 132, 47, 41))
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
+        self.rect = self.image.get_rect()
+        self.rect.center = (position[0], position[1])
+        self.posX = position[0]
+        self.posY = position[1]
+

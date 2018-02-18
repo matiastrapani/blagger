@@ -1,6 +1,6 @@
 import pygame
 class Spr(pygame.sprite.Sprite):
-    def __init__(self, position, general_sprites, name, nro, color, iniPos, endPos):
+    def __init__(self, general_sprites, position=(0,0), name='', nro=1, endpoints=(0,100), color=(0,0,0), direction='right'):
         self.sheet = general_sprites
         self.sheet.set_clip(pygame.Rect(200, 44, 47, 41))
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -24,8 +24,10 @@ class Spr(pygame.sprite.Sprite):
         self.posX = position[0]
         self.posY = position[1]
         self.vel  = 2
-        self.dir  = 'right'
+        self.dir  = direction
         self.name = name
+        iniPos = endpoints[0]
+        endPos = endpoints[1]
         if iniPos > endPos:
             iniPos, endPos = endPos, iniPos
         self.iniPos = iniPos
@@ -42,7 +44,8 @@ class Spr(pygame.sprite.Sprite):
             self.sheet.set_clip(pygame.Rect(self.get_frame(clipped_rect)))
         else:
             self.sheet.set_clip(pygame.Rect(clipped_rect))
-        self.sheet.set_palette_at(1, self.color)
+        if self.color!=(0,0,0):
+            self.sheet.set_palette_at(1, self.color)
         return clipped_rect
     
     def update(self):
@@ -92,4 +95,6 @@ class Spr(pygame.sprite.Sprite):
         if self.posY > 480 : self.posY -= 480
         if self.posY < 0 : self.posY += 480
         self.update()
+        
+
         

@@ -1,5 +1,5 @@
 import pygame, sys
-from levels import level3 as level
+from levels import level as level, levelSprites as lSpr
 import blaggerPlayer, baddiesPlayer
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -13,7 +13,7 @@ pygame.display.set_caption('The Bank')
 
 game_over = False
 clktcks = 40
-blagger_sounds = True
+blagger_sounds = False
 keys = 0
 
 transColor = pygame.Color(0, 0, 0)
@@ -46,10 +46,13 @@ for y, valY in enumerate(level):
         if valX == 78:
             bloque2 += (int(x * 16),int(y * 16)),
 fondo.set_colorkey(transColor)
+blagger = blaggerPlayer.Spr(sprites, **lSpr[0])
+safe = blaggerPlayer.Safe(sprites,**lSpr[1])
+fondo.blit(safe.image, safe.rect)      
 
-blagger = blaggerPlayer.Spr((240+16*10, 148-16*6), sprites)
-
-badGuy = baddiesPlayer.Spr((22+16*11,-13+16*18), sprites, 'waldo', 3, (181,239,148), 195, 367)
+badGuys = []
+for badspr in lSpr[2:]:
+    badGuys.append(baddiesPlayer.Spr(sprites, **badspr))
 idx = 0
 tile = animTiles.subsurface(animIndex[idx])
 
@@ -69,7 +72,9 @@ while blagger.game_over == False:
                 pygame.quit()
                 sys.exit()
     blagger.handle_event(event, level)
-    badGuy.update()
+    for badGuy in badGuys:
+        badGuy.update()
+
     screen.fill((0,0,0))
 
     if blagger_sounds:
@@ -136,7 +141,7 @@ while blagger.game_over == False:
             key_sound.play()
 
     screen.blit(fondo, (0,0))
-                        
+     
     #pygame.draw.rect(screen, (255, 255, 255), (i*16,j*16,16,16), 1)
     #pygame.draw.rect(screen, (255,0, 0), ((blagger.posX-7)//16*16,(blagger.posY//16+1)*16,32,16), 1)
     tile = animTiles.subsurface(animIndex[idx])
@@ -145,8 +150,10 @@ while blagger.game_over == False:
 
     tile = animTiles.subsurface(animIndex[idx+16])
     for pos in bloque2:
+
         screen.blit(tile, pos)
-    screen.blit(badGuy.image, badGuy.rect)
+    for badGuy in badGuys:
+        screen.blit(badGuy.image, badGuy.rect)
 
     pygame.display.flip()
     clock.tick(clktcks)
