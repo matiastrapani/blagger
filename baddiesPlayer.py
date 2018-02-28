@@ -33,6 +33,7 @@ class Spr(pygame.sprite.Sprite):
         self.iniPos = iniPos
         self.endPos = endPos
         self.color = color
+        self.sprCol = pygame.Rect(0, 0, 16, 32)
 
     def get_frame(self, frame_set):
         if self.frame > (len(frame_set) - 1):
@@ -83,6 +84,7 @@ class Spr(pygame.sprite.Sprite):
                 self.posY = self.iniPos - (self.iniPos - self.posY)
 
         self.rect.center = (self.posX, self.posY)
+        self.sprCol.center = (self.posX, self.posY)
         self.image = self.sheet.subsurface(self.sheet.get_clip())
 
     def handle_event(self, event):
