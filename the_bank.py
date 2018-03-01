@@ -178,8 +178,8 @@ while blagger.game_over == False:
     #safe collision
     if safe.rect.collidepoint(blagger.sprCol.center):
         lNro += 1
-        lSpr = levelSprites[1]
-        level = deepcopy(levels[1])
+        lSpr = levelSprites[lNro]
+        level = deepcopy(levels[lNro])
         
         blagger = blaggerPlayer.Spr(sprites, **lSpr[0])
         safe = blaggerPlayer.Safe(sprites, **lSpr[1])

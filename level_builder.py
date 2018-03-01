@@ -60,7 +60,7 @@ else:
             bricks[int(x + y * 32)]  = (x * 16, y * 16, 16, 16)
 
 
-    levels = level[1]
+    levels = level[3]
     levelSprites = levelSprite [1]
 
     tile.tab_sprite()

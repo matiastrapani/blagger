@@ -22,6 +22,11 @@ levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1ed             \x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e')])
 
+levelSprites.append([ \
+    {'position': (396, 52), 'direction': 'stand_right'}, \
+    {'position': (427, 133)}, \
+    {'position': (238, 276), 'nro': 3, 'endpoints': (206, 356), 'direction': 'right'}])
+
 levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
     bytearray(b'\x1e           !     \x1e\x1e\x1e\x1e\x1e      \x1e\x1e'), \
@@ -42,6 +47,13 @@ levels.append([ \
     bytearray(b'\x1e                 gg          \x1e'), \
     bytearray(b'\x1e                             \x1e'), \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e')])
+
+levelSprites.append([ \
+    {'position': (36, 36)}, \
+    {'position': (459, 277)}, \
+    {'position': (104, 86), 'nro': 5, 'endpoints': (44, 305), 'direction': 'right', 'color': (181, 239, 148)}, \
+    {'position': (174, 280), 'nro': 5, 'endpoints': (46, 304), 'direction': 'left', 'color': (147, 80, 183)}, \
+    {'position': (360, 144), 'nro': 5, 'endpoints': (102, 281), 'direction': 'down', 'color': (155, 105, 44)}])
 
 levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e   %   %    \x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
@@ -64,6 +76,12 @@ levels.append([ \
     bytearray(b'\x1e                             \x1e'), \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e')])
 
+levelSprites.append([ \
+    {'position': (36, 228)}, \
+    {'position': (459, 277)}, \
+    {'position': (99, 68), 'nro': 2, 'endpoints': (42, 305), 'direction': 'right', 'color': (181, 239, 148)}, \
+    {'position': (200, 278), 'nro': 2, 'endpoints': (94, 457), 'direction': 'left', 'color': (155, 105, 44)}])
+
 levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
     bytearray(b'\x1e                    !        \x1e'), \
@@ -71,8 +89,8 @@ levels.append([ \
     bytearray(b'\x1ejjjj  jjjjj  gg    gg        \x1e'), \
     bytearray(b'\x1e             % NN            \x1e'), \
     bytearray(b'\x1ejj           \x1e   NN        gg\x1e'), \
-    bytearray(b'\x1e           jj\x1e          $    \x1e'), \
-    bytearray(b'\x1ejj           \x1e      &\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
+    bytearray(b'\x1e           jj\x1e!         $    \x1e'), \
+    bytearray(b'\x1ejj         ! \x1e      &\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
     bytearray(b'\x1e       $     \x1e    &&  %      \x1e'), \
     bytearray(b'\x1e\x1e\x1e&&&&&&&&&&&\x1e  && !         \x1e'), \
     bytearray(b'\x1e       !     \x1e               \x1e'), \
@@ -84,6 +102,19 @@ levels.append([ \
     bytearray(b'\x1e                         gg%%\x1e'), \
     bytearray(b'\x1ej                       gg%%%\x1e'), \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e')])
+
+levelSprites.append([ \
+    {'position': (236, 36)}, \
+    {'position': (459, 33)}, \
+    {'position': (93, 86), 'nro': 4, 'endpoints': (38, 196), 'direction': 'left', 'color': (147, 80, 183)}, \
+    {'position': (96, 276), 'nro': 4, 'endpoints': (74, 296), 'direction': 'right', 'color': (155, 105, 44)}, \
+    {'position': (344, 206), 'nro': 4, 'endpoints': (182, 275), 'direction': 'down', 'color': (181, 239, 148)}])
+
+
+
+
+
+
 
 levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
@@ -127,13 +158,3 @@ levels.append([ \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1ed  N NN N N   \x1e\x1e\x1e\x1e\x1e\x1e\x1e'), \
     bytearray(b'\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e\x1e')])
 
-levelSprites.append([ \
-    {'position':(396, 52), 'direction':'stand_right'},  \
-    {'position':(427, 133)},  \
-    {'position': (232, 276), 'nro': 3, 'endpoints': (195, 367), 'direction': 'right'}])
-
-levelSprites.append([ \
-    {'position': (40, 36)}, \
-    {'position': (457, 274)}, \
-    {'position': (136, 84), 'nro': 5, 'endpoints': (40, 328), 'direction': 'right'}, \
-    {'position': (40, 276), 'nro': 5, 'endpoints': (40, 296), 'direction': 'right'}])
